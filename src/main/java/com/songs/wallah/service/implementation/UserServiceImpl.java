@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDTO getUser(String email) {
 		
+		
 		ModelMapper modelMapper = new ModelMapper();
 		UserEntity userEntity = userRepository.findByEmail(email);
 		if(userEntity==null) {
