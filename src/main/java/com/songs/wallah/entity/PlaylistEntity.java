@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,10 +31,10 @@ public class PlaylistEntity {
 	@Column(nullable = false)
 	private PlayListAccess accessability;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private SongEntity playlistSong;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private UserEntity owner;
 
 	public Priority getPriority() {

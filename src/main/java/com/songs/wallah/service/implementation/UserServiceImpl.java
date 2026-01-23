@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.songs.wallah.DataTransferObject.UserDTO;
+import com.songs.wallah.configuration.SwaggerConfiguration;
 import com.songs.wallah.entity.UserEntity;
 import com.songs.wallah.repository.UserRepository;
 import com.songs.wallah.service.UserService;
@@ -20,20 +21,26 @@ import jakarta.validation.constraints.NotBlank;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final SwaggerConfiguration swaggerConfiguration;
+
 	private UserRepository userRepository;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+	public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, SwaggerConfiguration swaggerConfiguration) {
 		this.userRepository = userRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+		this.swaggerConfiguration = swaggerConfiguration;
 	}
 
 	// during login it is being called
 	@Override
-	public UserDetails loadUserByUsername(@NotBlank @Email String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserEntity loggedIn = userRepository.findByEmail(username);
 		if (loggedIn == null) {
 			throw new UsernameNotFoundException(username);
+		}
+		if(!loggedIn.isEmailVerification()) {
+			throw new RuntimeException("Email isn't verified");
 		}
 		// User constructor takes user name,encrypted password gets converted in
 		// password and list of granted authority

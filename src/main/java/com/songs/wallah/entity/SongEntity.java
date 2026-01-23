@@ -10,6 +10,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -53,10 +54,10 @@ public class SongEntity {
 	@Column(nullable = false)
 	private double rating;
 
-	@OneToMany(mappedBy = "favSong", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "favSong", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<FavoriteEntity> favoriteSongs;
 
-	@OneToMany(mappedBy = "playlistSong", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "playlistSong", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<PlaylistEntity> playlistSongs;
 
 	@PrePersist

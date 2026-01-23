@@ -50,7 +50,5 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		String token = jwtUtil.generateToken(username);
 
 		response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-
-		response.addHeader("USER ID", userService.getUser(username).getPublicId().toString());
 	}
 }

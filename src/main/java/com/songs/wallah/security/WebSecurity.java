@@ -70,6 +70,7 @@ public class WebSecurity {
 
 				// Public endpoints
 				.requestMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
+				.requestMatchers(HttpMethod.POST, SecurityConstants.EMAIL_VERIFICATION).permitAll()
 				.requestMatchers(HttpMethod.POST, "/login").permitAll()
 
 				// ADMIN has full access
