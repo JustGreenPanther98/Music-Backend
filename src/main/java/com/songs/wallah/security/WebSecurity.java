@@ -9,10 +9,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.songs.wallah.security.SpingConstraints.SecurityConstants;
 import com.songs.wallah.service.UserService;
-
 
 @Configuration
 @EnableWebSecurity
@@ -71,12 +71,9 @@ public class WebSecurity {
 				// Public endpoints
 				.requestMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
 				.requestMatchers(HttpMethod.POST, SecurityConstants.EMAIL_VERIFICATION).permitAll()
-				.requestMatchers(HttpMethod.POST, "/login").permitAll()
+				.requestMatchers(HttpMethod.POST, "/login").permitAll().anyRequest().authenticated());
 
-				// ADMIN has full access
-				.requestMatchers("/admin/**").hasRole("ADMIN"));
-
-		http.addFilter(authFilter).addFilterAfter(new AuthorizationFilter(jwtUtil), AuthenticationFilter.class);
+		http.addFilter(authFilter).addFilterAfter(new AuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 //		form login is session based , but we are doing token based with JWT
 //		http.formLogin(Customizer.withDefaults());
 

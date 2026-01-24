@@ -15,18 +15,16 @@ import com.songs.wallah.entity.UserEntity;
 import com.songs.wallah.repository.UserRepository;
 import com.songs.wallah.service.UserService;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final SwaggerConfiguration swaggerConfiguration;
+	private final SwaggerConfiguration swaggerConfiguration;
 
 	private UserRepository userRepository;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, SwaggerConfiguration swaggerConfiguration) {
+	public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder,
+			SwaggerConfiguration swaggerConfiguration) {
 		this.userRepository = userRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.swaggerConfiguration = swaggerConfiguration;
@@ -39,7 +37,7 @@ public class UserServiceImpl implements UserService {
 		if (loggedIn == null) {
 			throw new UsernameNotFoundException(username);
 		}
-		if(!loggedIn.isEmailVerification()) {
+		if (!loggedIn.isEmailVerification()) {
 			throw new RuntimeException("Email isn't verified");
 		}
 		// User constructor takes user name,encrypted password gets converted in
@@ -64,15 +62,33 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO getUser(String email) {
-		
-		
+		if (email == null) {
+			throw new UsernameNotFoundException("Email doesn't exist");
+		}
 		ModelMapper modelMapper = new ModelMapper();
 		UserEntity userEntity = userRepository.findByEmail(email);
-		if(userEntity==null) {
+		if (userEntity == null) {
 			throw new UsernameNotFoundException("User doesn't exist");
 		}
 		return modelMapper.map(userEntity, UserDTO.class);
-		
-	}
 
+	}
+	
+	public UserDTO updateUser(UserDTO updatedDetails) {
+		if(updatedDetails==null) {
+			throw new RuntimeException("Invalid login!");
+		}
+		UserEntity user = userRepository.findByEmail(updatedDetails.getEmail());
+		user.setFirstName(updatedDetails.getFirstName());
+		user.setLastName(updatedDetails.getLastName());
+		user.setMiddleName(updatedDetails.getMiddleName());
+		user.setAge(updatedDetails.getAge());
+		user = userRepository.save(user);
+		UserDTO updatedUser = new UserDTO();
+		updatedUser.setFirstName(user.getFirstName());
+		updatedUser.setMiddleName(user.getMiddleName());
+		updatedUser.setLastName(user.getLastName());
+		updatedUser.setAge(user.getAge());
+		return updatedUser;
+	}
 }

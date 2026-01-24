@@ -42,7 +42,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
 		if (username != null) {
 			SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null,
-					Collections.singletonList(() -> "ROLE_ADMIN")));
+					Collections.emptySet()));
 		}
 
 		chain.doFilter(request, response);

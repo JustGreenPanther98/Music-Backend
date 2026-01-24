@@ -46,6 +46,9 @@ public class OtpServiceImplementation implements OtpService {
 
 	@Override
 	public OtpVerification verifyOtp(String email, String givenOtp) {
+		if (email==null||givenOtp==null||email.isEmpty()||givenOtp.isEmpty()) {
+			throw new RuntimeException("Incorrect Credentials");
+		}
 		UserEntity user = userRepository.findByEmail(email);
 		if(user==null) {
 			return OtpVerification.INVALID_EMAIL;
@@ -59,7 +62,7 @@ public class OtpServiceImplementation implements OtpService {
 			userRepository.save(user);
 			return OtpVerification.SUCCESS;
 		}
-		return OtpVerification.ERROR;
+		return OtpVerification.INVALID_OTP;
 	}
 
 }

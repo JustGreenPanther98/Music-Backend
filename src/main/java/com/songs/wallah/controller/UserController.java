@@ -1,7 +1,11 @@
 package com.songs.wallah.controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,31 +15,38 @@ import com.songs.wallah.configuration.SwaggerConfiguration;
 import com.songs.wallah.enums.otp.OtpVerification;
 import com.songs.wallah.request.EmailVerificationRequest;
 import com.songs.wallah.request.UserSignupRequest;
+import com.songs.wallah.request.UserUpdateRequest;
+import com.songs.wallah.response.UserProfile;
 import com.songs.wallah.response.UserResponse;
 import com.songs.wallah.service.UserService;
 import com.songs.wallah.service.implementation.OtpServiceImplementation;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
-@Tag(name="User APIs")
+@Tag(name = "User APIs")
 public class UserController {
 
 	private final SwaggerConfiguration swaggerConfiguration;
+
+	private final AuthenticationManager authenticationManager;
+
 	private UserService userService;
 	private OtpServiceImplementation otpServiceImplementation;
 
-	public UserController(UserService userService, SwaggerConfiguration swaggerConfiguration,
-			OtpServiceImplementation otpServiceImplementation) {
+	public UserController(UserService userService, OtpServiceImplementation otpServiceImplementation,
+			AuthenticationManager authenticationManager, SwaggerConfiguration swaggerConfiguration) {
 		this.userService = userService;
-		this.swaggerConfiguration = swaggerConfiguration;
 		this.otpServiceImplementation = otpServiceImplementation;
+		this.authenticationManager = authenticationManager;
+		this.swaggerConfiguration = swaggerConfiguration;
 	}
 
-	@PostMapping(path="/signup", consumes = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+	@PostMapping(path = "/signup", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@Operation(summary = "Creation of account")
 	public UserResponse createAccount(@Valid @RequestBody UserSignupRequest userSignupRequest) {
 		UserDTO userDTO = new UserDTO();
 		userDTO.setEmail(userSignupRequest.email());
@@ -46,23 +57,47 @@ public class UserController {
 		userDTO.setLastName(userSignupRequest.lastName());
 		otpServiceImplementation.sendOtp(userSignupRequest.email());
 		UserDTO createdUserDTO = userService.createAccount(userDTO);
-		UserResponse userResponse = new UserResponse(createdUserDTO.getPublicId(),createdUserDTO.getEmail());
+		UserResponse userResponse = new UserResponse(createdUserDTO.getPublicId(), createdUserDTO.getEmail());
 		return userResponse;
 	}
 
 	@PostMapping(path = "/verify", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					MediaType.APPLICATION_XML_VALUE })
+	@Operation(summary = "It Verifies account using OTP", description = "(It takes email,otp in form of json or xml and returns(OTP_EXPIRED/INVALID_OTP/INVALID_EMAIL/SUCCESS/ERROR), Without email verification the user can't login)")
 	public OtpVerification verifyEmail(@RequestBody EmailVerificationRequest emailVerificationRequest) {
-		if (userService.getUser(emailVerificationRequest.email()) == null) {
-			throw new RuntimeException("Incorrect email");
-		}
 		return otpServiceImplementation.verifyOtp(emailVerificationRequest.email(),
 				emailVerificationRequest.otp().toString());
 	}
 
-//	@GetMapping("/me")
-//	public UserProfile getProfile(Authentication authentication) {
-//		
-//	}
+	@GetMapping(path = "/me")
+	@Operation(summary = "Returns User's Details (LOGIN REQUIRED)", description = "(It returns whole user profile [but NOT password,email])")
+	public UserProfile getProfile(Authentication authentication) {
+		UserDTO userDTO = userService.getUser(authentication.getName());
+		UserProfile userProfile = new UserProfile(userDTO.getFirstName(), userDTO.getMiddleName(),
+				userDTO.getLastName(), userDTO.getAge(), userDTO.getEmail());
+		return userProfile;
+
+	}
+
+	@PutMapping(path = "/update", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					MediaType.APPLICATION_XML_VALUE })
+	@Operation(summary = "Update User's Details (LOGIN REQUIRED)", description = "(It takes whole profile for updation, but you can only update first name,middle name,last name,age)")
+	public UserUpdateRequest updateProfile(@RequestBody UserUpdateRequest updatedProfile,
+			Authentication authentication) {
+
+		UserDTO userDTO = new UserDTO();
+
+		userDTO.setFirstName(updatedProfile.firstName());
+		userDTO.setLastName(updatedProfile.lastName());
+		userDTO.setMiddleName(updatedProfile.middleName());
+		userDTO.setAge(updatedProfile.age());
+		userDTO.setEmail(authentication.getName());
+		UserDTO updatedUserDTO = userService.updateUser(userDTO);
+		UserUpdateRequest userUpdateRequest = new UserUpdateRequest(updatedUserDTO.getFirstName(),
+				updatedUserDTO.getMiddleName(), updatedUserDTO.getLastName(), updatedUserDTO.getAge());
+		return userUpdateRequest;
+	}
+
 }
