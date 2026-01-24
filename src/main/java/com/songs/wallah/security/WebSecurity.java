@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.songs.wallah.security.SpingConstraints.SecurityConstants;
+import com.songs.wallah.enums.songs.Role;
 import com.songs.wallah.service.UserService;
 
 @Configuration
@@ -69,11 +69,14 @@ public class WebSecurity {
 				.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
 				// Public endpoints
-				.requestMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
-				.requestMatchers(HttpMethod.POST, SecurityConstants.EMAIL_VERIFICATION).permitAll()
-				.requestMatchers(HttpMethod.POST, "/login").permitAll().anyRequest().authenticated());
+				.requestMatchers(HttpMethod.POST, SecurityConstaints.SIGN_UP_URL).permitAll()
+				.requestMatchers(HttpMethod.POST, SecurityConstaints.EMAIL_VERIFICATION).permitAll()
+				.requestMatchers(HttpMethod.POST, SecurityConstaints.RESEND_OTP).permitAll()
+				.requestMatchers(HttpMethod.POST, SecurityConstaints.LOGIN).permitAll()
+				.requestMatchers("/admin/**").hasRole(Role.ADMIN.toString())
+				.anyRequest().authenticated());
 
-		http.addFilter(authFilter).addFilterAfter(new AuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+		http.addFilter(authFilter).addFilterBefore(new AuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 //		form login is session based , but we are doing token based with JWT
 //		http.formLogin(Customizer.withDefaults());
 

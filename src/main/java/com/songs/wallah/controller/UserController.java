@@ -3,6 +3,7 @@ package com.songs.wallah.controller;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,15 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.songs.wallah.DataTransferObject.UserDTO;
-import com.songs.wallah.configuration.SwaggerConfiguration;
+import com.songs.wallah.enums.otp.OtpResend;
 import com.songs.wallah.enums.otp.OtpVerification;
+import com.songs.wallah.enums.songs.Role;
 import com.songs.wallah.request.EmailVerificationRequest;
+import com.songs.wallah.request.ResendOtpRequest;
 import com.songs.wallah.request.UserSignupRequest;
 import com.songs.wallah.request.UserUpdateRequest;
 import com.songs.wallah.response.UserProfile;
 import com.songs.wallah.response.UserResponse;
+import com.songs.wallah.service.OtpService;
 import com.songs.wallah.service.UserService;
-import com.songs.wallah.service.implementation.OtpServiceImplementation;
+import com.songs.wallah.service.implementation.EmailSenderImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,21 +32,21 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/users")
 @Tag(name = "User APIs")
+@CrossOrigin("*")
 public class UserController {
 
-	private final SwaggerConfiguration swaggerConfiguration;
+    private final EmailSenderImpl emailSenderImpl;
 
 	private final AuthenticationManager authenticationManager;
-
 	private UserService userService;
-	private OtpServiceImplementation otpServiceImplementation;
+	private OtpService otpService;
 
-	public UserController(UserService userService, OtpServiceImplementation otpServiceImplementation,
-			AuthenticationManager authenticationManager, SwaggerConfiguration swaggerConfiguration) {
+	public UserController(UserService userService, OtpService otpService,
+			AuthenticationManager authenticationManager, EmailSenderImpl emailSenderImpl) {
 		this.userService = userService;
-		this.otpServiceImplementation = otpServiceImplementation;
+		this.otpService = otpService;
 		this.authenticationManager = authenticationManager;
-		this.swaggerConfiguration = swaggerConfiguration;
+		this.emailSenderImpl = emailSenderImpl;
 	}
 
 	@PostMapping(path = "/signup", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
@@ -55,10 +59,18 @@ public class UserController {
 		userDTO.setFirstName(userSignupRequest.firstName());
 		userDTO.setMiddleName(userSignupRequest.middleName());
 		userDTO.setLastName(userSignupRequest.lastName());
-		otpServiceImplementation.sendOtp(userSignupRequest.email());
+		userDTO.setRole(Role.USER);
+		otpService.sendOtp(userSignupRequest.email());
 		UserDTO createdUserDTO = userService.createAccount(userDTO);
 		UserResponse userResponse = new UserResponse(createdUserDTO.getPublicId(), createdUserDTO.getEmail());
 		return userResponse;
+	}
+	
+	@PostMapping(path="/resend-otp", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE })
+	@Operation(summary = "Resend OTP", description = "(Resend OTP to email which is already being signup (Latest OTP will get accepted))")
+	public OtpResend resendOtp(@RequestBody ResendOtpRequest otpResend) {
+		return otpService.resendOtp(otpResend.email());
 	}
 
 	@PostMapping(path = "/verify", consumes = { MediaType.APPLICATION_JSON_VALUE,
@@ -66,7 +78,7 @@ public class UserController {
 					MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "It Verifies account using OTP", description = "(It takes email,otp in form of json or xml and returns(OTP_EXPIRED/INVALID_OTP/INVALID_EMAIL/SUCCESS/ERROR), Without email verification the user can't login)")
 	public OtpVerification verifyEmail(@RequestBody EmailVerificationRequest emailVerificationRequest) {
-		return otpServiceImplementation.verifyOtp(emailVerificationRequest.email(),
+		return otpService.verifyOtp(emailVerificationRequest.email(),
 				emailVerificationRequest.otp().toString());
 	}
 

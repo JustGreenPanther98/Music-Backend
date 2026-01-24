@@ -1,12 +1,11 @@
 package com.songs.wallah.security;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.songs.wallah.security.SpingConstraints.SecurityConstants;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,19 +29,22 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		String header = request.getHeader(SecurityConstants.HEADER_STRING);
+		String header = request.getHeader(SecurityConstaints.HEADER_STRING);
 
-		if (header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+		if (header == null || !header.startsWith(SecurityConstaints.TOKEN_PREFIX)) {
 			chain.doFilter(request, response);
 			return;
 		}
 
-		String token = header.replace(SecurityConstants.TOKEN_PREFIX, "");
+		String token = header.replace(SecurityConstaints.TOKEN_PREFIX, "");
 		String username = jwtUtil.extractUsername(token);
+		String role = jwtUtil.extractRole(token);
 
-		if (username != null) {
+		if (username != null && role!=null) {
+			SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
+			
 			SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null,
-					Collections.emptySet()));
+					List.of(authority)));
 		}
 
 		chain.doFilter(request, response);

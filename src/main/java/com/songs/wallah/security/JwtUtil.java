@@ -8,8 +8,6 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.songs.wallah.security.SpingConstraints.SecurityConstants;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -23,12 +21,17 @@ public class JwtUtil {
 		this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 	}
 
-	public String generateToken(String username) {
+	public String generateToken(String username,String role) {
 
 		Instant now = Instant.now();
 
-		return Jwts.builder().subject(username).issuedAt(Date.from(now))
-				.expiration(Date.from(now.plusMillis(SecurityConstants.EXPIRATION_TIME))).signWith(key).compact();
+		return Jwts.builder().
+				subject(username).
+				claim("role",role).
+				issuedAt(Date.from(now)).
+				expiration(Date.from(now.plusMillis(SecurityConstaints.EXPIRATION_TIME))).
+				signWith(key).
+				compact();
 	}
 
 	public String extractUsername(String token) {
@@ -39,5 +42,13 @@ public class JwtUtil {
 				parseSignedClaims(token).
 				getPayload().
 				getSubject();
+	}
+	public String extractRole(String token) {
+	    return Jwts.parser()
+	            .verifyWith(key)
+	            .build()
+	            .parseSignedClaims(token)
+	            .getPayload()
+	            .get("role", String.class);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.songs.wallah.entity.FavoriteEntity;
 import com.songs.wallah.entity.PlaylistEntity;
+import com.songs.wallah.enums.songs.Role;
 
 public class UserDTO {
 
@@ -19,6 +20,7 @@ public class UserDTO {
 	private boolean emailVerification=false;
 	private List<FavoriteEntity> favorites;
 	private List<PlaylistEntity> playlist;
+	private Role role;
 
 	public long getId() {
 		return id;
@@ -108,4 +110,13 @@ public class UserDTO {
 		this.playlist = playlist;
 	}
 
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	
+	
 }

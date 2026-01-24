@@ -1,7 +1,8 @@
 package com.songs.wallah.service.implementation;
 
 import java.util.ArrayList;
-
+import java.util.List;
+import io.swagger.v3.oas.models.OpenAPI;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,16 +19,19 @@ import com.songs.wallah.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final OpenAPI myConfiguration;
+
 	private final SwaggerConfiguration swaggerConfiguration;
 
 	private UserRepository userRepository;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder,
-			SwaggerConfiguration swaggerConfiguration) {
+			SwaggerConfiguration swaggerConfiguration, OpenAPI myConfiguration) {
 		this.userRepository = userRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.swaggerConfiguration = swaggerConfiguration;
+		this.myConfiguration = myConfiguration;
 	}
 
 	// during login it is being called
@@ -90,5 +94,15 @@ public class UserServiceImpl implements UserService {
 		updatedUser.setLastName(user.getLastName());
 		updatedUser.setAge(user.getAge());
 		return updatedUser;
+	}
+	
+	public List<UserDTO> getAllUsers() {
+		Iterable<UserEntity> users = userRepository.findAll();
+		List<UserDTO> usersDTO = new ArrayList<>();
+		ModelMapper modelMapper = new ModelMapper();
+		for(UserEntity user : users) {
+			usersDTO.add(modelMapper.map(user,UserDTO.class));
+		}
+		return usersDTO;
 	}
 }

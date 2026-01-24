@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.songs.wallah.request.UserLoginRequest;
-import com.songs.wallah.security.SpingConstraints.SecurityConstants;
 import com.songs.wallah.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,8 +46,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 			jakarta.servlet.FilterChain chain, Authentication auth) {
 
 		String username = auth.getName();// username <- email
-		String token = jwtUtil.generateToken(username);
+		var user = userService.getUser(username);//role over here
+		String token = jwtUtil.generateToken(username,user.getRole().name());
 
-		response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+		response.addHeader(SecurityConstaints.HEADER_STRING, SecurityConstaints.TOKEN_PREFIX + token);
 	}
 }
