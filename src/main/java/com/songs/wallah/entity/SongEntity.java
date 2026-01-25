@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.songs.wallah.enums.songs.Category;
-import com.songs.wallah.enums.songs.Langauge;
+import com.songs.wallah.enums.songs.Language;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -41,7 +41,7 @@ public class SongEntity {
 	private Category category;
 
 	@Enumerated(EnumType.STRING)
-	private Langauge langauge;
+	private Language langauge;
 
 	@Column(nullable = false)
 	private String url;
@@ -129,11 +129,11 @@ public class SongEntity {
 		this.rating = rating;
 	}
 
-	public Langauge getLangauge() {
+	public Language getLanguage() {
 		return langauge;
 	}
 
-	public void setLangauge(Langauge langauge) {
+	public void setLanguage(Language langauge) {
 		this.langauge = langauge;
 	}
 

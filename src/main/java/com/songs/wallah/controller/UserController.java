@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 @Tag(name = "User APIs")
 @CrossOrigin("*")
 public class UserController {
@@ -86,7 +86,7 @@ public class UserController {
 	@Operation(summary = "Returns User's Details (LOGIN REQUIRED)", description = "(It returns whole user profile [but NOT password,email])")
 	public UserProfile getProfile(Authentication authentication) {
 		UserDTO userDTO = userService.getUser(authentication.getName());
-		UserProfile userProfile = new UserProfile(userDTO.getFirstName(), userDTO.getMiddleName(),
+		UserProfile userProfile = new UserProfile(userDTO.getPublicId(), userDTO.getFirstName(), userDTO.getMiddleName(),
 				userDTO.getLastName(), userDTO.getAge(), userDTO.getEmail());
 		return userProfile;
 

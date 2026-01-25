@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -64,15 +65,17 @@ public class WebSecurity {
 
 		http.csrf(csrf -> csrf.disable());
 
+		http.cors(Customizer.withDefaults());
+		
 		http.authorizeHttpRequests(auth -> auth
 				// Swagger (public)
 				.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-
 				// Public endpoints
 				.requestMatchers(HttpMethod.POST, SecurityConstaints.SIGN_UP_URL).permitAll()
 				.requestMatchers(HttpMethod.POST, SecurityConstaints.EMAIL_VERIFICATION).permitAll()
 				.requestMatchers(HttpMethod.POST, SecurityConstaints.RESEND_OTP).permitAll()
 				.requestMatchers(HttpMethod.POST, SecurityConstaints.LOGIN).permitAll()
+				.requestMatchers(HttpMethod.POST, "/api/v1/users/upload-song").permitAll()
 				.requestMatchers("/admin/**").hasRole(Role.ADMIN.toString())
 				.anyRequest().authenticated());
 

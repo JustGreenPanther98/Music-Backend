@@ -1,4 +1,5 @@
 package com.songs.wallah.security;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -40,11 +41,11 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 		String username = jwtUtil.extractUsername(token);
 		String role = jwtUtil.extractRole(token);
 
-		if (username != null && role!=null) {
+		if (username != null && role != null) {
 			SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
-			
-			SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null,
-					List.of(authority)));
+
+			SecurityContextHolder.getContext()
+					.setAuthentication(new UsernamePasswordAuthenticationToken(username, null, List.of(authority)));
 		}
 
 		chain.doFilter(request, response);

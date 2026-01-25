@@ -1,6 +1,6 @@
 package com.songs.wallah.enums.songs;
 
-public enum Langauge {
+public enum Language {
 	HINDI,
 	ENGLISH,
 	OTHER
