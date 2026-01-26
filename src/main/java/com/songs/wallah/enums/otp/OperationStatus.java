@@ -1,6 +1,6 @@
 package com.songs.wallah.enums.otp;
 
-public enum OtpResend {
+public enum OperationStatus {
 	SUCCESS,
 	FAIL
 }

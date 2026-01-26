@@ -6,6 +6,6 @@ import com.songs.wallah.enums.songs.Language;
 import jakarta.validation.constraints.NotBlank;
 
 public record SongUploadRequest(@NotBlank String songName, @NotBlank String artistName, @NotBlank Category category,
-		Language language, @NotBlank String url, @NotBlank int durationInSeconds, @NotBlank double rating) {
+		@NotBlank Language language, @NotBlank String url, int durationInSeconds, @NotBlank double rating) {
 
 }

@@ -41,7 +41,7 @@ public class SongEntity {
 	private Category category;
 
 	@Enumerated(EnumType.STRING)
-	private Language langauge;
+	private Language language;
 
 	@Column(nullable = false)
 	private String url;
@@ -130,11 +130,11 @@ public class SongEntity {
 	}
 
 	public Language getLanguage() {
-		return langauge;
+		return language;
 	}
 
 	public void setLanguage(Language langauge) {
-		this.langauge = langauge;
+		this.language = langauge;
 	}
 
 	public List<FavoriteEntity> getFavoriteSongs() {

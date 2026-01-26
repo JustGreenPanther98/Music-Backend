@@ -2,6 +2,8 @@ package com.songs.wallah.service.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import io.swagger.v3.oas.models.OpenAPI;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.User;
@@ -13,25 +15,19 @@ import org.springframework.stereotype.Service;
 import com.songs.wallah.DataTransferObject.UserDTO;
 import com.songs.wallah.configuration.SwaggerConfiguration;
 import com.songs.wallah.entity.UserEntity;
+import com.songs.wallah.enums.otp.OperationStatus;
 import com.songs.wallah.repository.UserRepository;
 import com.songs.wallah.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final OpenAPI myConfiguration;
-
-	private final SwaggerConfiguration swaggerConfiguration;
-
 	private UserRepository userRepository;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder,
-			SwaggerConfiguration swaggerConfiguration, OpenAPI myConfiguration) {
+	public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.userRepository = userRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-		this.swaggerConfiguration = swaggerConfiguration;
-		this.myConfiguration = myConfiguration;
 	}
 
 	// during login it is being called
@@ -105,4 +101,22 @@ public class UserServiceImpl implements UserService {
 		}
 		return usersDTO;
 	}
+
+	@Override
+	public OperationStatus deleteUserByEmailAndId(UUID publicId, String email) {
+		if(publicId==null || email == null) {
+			return OperationStatus.FAIL;
+		}
+		UserEntity user = userRepository.findByEmail(email);
+		if(user==null) {
+			return OperationStatus.FAIL;
+		}
+		if(user.getPublicId()==publicId) {
+			return OperationStatus.FAIL;
+		}
+		userRepository.delete(user);
+		return OperationStatus.SUCCESS;
+	}
+	
+	
 }

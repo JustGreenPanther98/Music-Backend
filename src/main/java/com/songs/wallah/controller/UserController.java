@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.songs.wallah.DataTransferObject.UserDTO;
-import com.songs.wallah.enums.otp.OtpResend;
+import com.songs.wallah.enums.otp.OperationStatus;
 import com.songs.wallah.enums.otp.OtpVerification;
 import com.songs.wallah.enums.songs.Role;
 import com.songs.wallah.request.EmailVerificationRequest;
@@ -69,7 +69,7 @@ public class UserController {
 	@PostMapping(path="/resend-otp", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Resend OTP", description = "(Resend OTP to email which is already being signup (Latest OTP will get accepted))")
-	public OtpResend resendOtp(@RequestBody ResendOtpRequest otpResend) {
+	public OperationStatus resendOtp(@RequestBody ResendOtpRequest otpResend) {
 		return otpService.resendOtp(otpResend.email());
 	}
 

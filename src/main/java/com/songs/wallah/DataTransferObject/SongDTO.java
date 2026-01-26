@@ -15,7 +15,7 @@ public class SongDTO {
 	private String songName;
 	private String artistName;
 	private Category category;
-	private Language langauge;
+	private Language language;
 	private String url;
 	private int durationInSeconds;
 	private double rating;
@@ -25,13 +25,25 @@ public class SongDTO {
 	public SongDTO() {
 
 	}
+	
+	public SongDTO(UUID publicId,String songName, String artistName, Category category, Language language, String url,
+			int durationInSeconds, double rating) {
+		this.publicId=publicId;
+		this.songName = songName;
+		this.artistName = artistName;
+		this.category = category;
+		this.language = language;
+		this.url = url;
+		this.durationInSeconds = durationInSeconds;
+		this.rating = rating;
+	}
 
 	public SongDTO(String songName, String artistName, Category category, Language language, String url,
 			int durationInSeconds, double rating) {
 		this.songName = songName;
 		this.artistName = artistName;
 		this.category = category;
-		this.langauge = langauge;
+		this.language = language;
 		this.url = url;
 		this.durationInSeconds = durationInSeconds;
 		this.rating = rating;
@@ -44,7 +56,7 @@ public class SongDTO {
 		this.songName = songName;
 		this.artistName = artistName;
 		this.category = category;
-		this.langauge = language;
+		this.language = language;
 		this.url = url;
 		this.durationInSeconds = durationInSeconds;
 		this.rating = rating;
@@ -92,14 +104,6 @@ public class SongDTO {
 		this.category = category;
 	}
 
-	public Language getLanguage() {
-		return langauge;
-	}
-
-	public void setLanguage(Language langauge) {
-		this.langauge = langauge;
-	}
-
 	public String getUrl() {
 		return url;
 	}
@@ -140,4 +144,11 @@ public class SongDTO {
 		this.playlistSongs = playlistSongs;
 	}
 
+	public Language getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
 }

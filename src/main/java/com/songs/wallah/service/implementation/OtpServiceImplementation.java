@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.songs.wallah.entity.OtpEntity;
 import com.songs.wallah.entity.UserEntity;
-import com.songs.wallah.enums.otp.OtpResend;
+import com.songs.wallah.enums.otp.OperationStatus;
 import com.songs.wallah.enums.otp.OtpVerification;
 import com.songs.wallah.repository.OtpRepository;
 import com.songs.wallah.repository.UserRepository;
@@ -42,17 +42,17 @@ public class OtpServiceImplementation implements OtpService {
 
 	}
 	
-	public OtpResend resendOtp(String email) {
+	public OperationStatus resendOtp(String email) {
 		UserEntity user = userRepository.findByEmail(email);
 		
 		if(user==null) {
 			throw new UsernameNotFoundException("Email doesn't exist");
 		}
 		if(user.isEmailVerification()) {
-			return OtpResend.FAIL;
+			return OperationStatus.FAIL;
 		}
 		sendOtp(email);
-		return OtpResend.SUCCESS;
+		return OperationStatus.SUCCESS;
 	}
 
 	@Override
