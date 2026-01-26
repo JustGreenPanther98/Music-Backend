@@ -33,18 +33,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Admin APIs")
 public class AdminController {
 
-    private final SwaggerConfiguration swaggerConfiguration;
-
-    private final CorsConfigurationSource corsConfigurationSource;
-
 	private UserService userService;
 	private SongService songService;
 
-	public AdminController(UserService userService, SongService songService, CorsConfigurationSource corsConfigurationSource, SwaggerConfiguration swaggerConfiguration) {
+	public AdminController(UserService userService, SongService songService) {
 		this.userService = userService;
 		this.songService = songService;
-		this.corsConfigurationSource = corsConfigurationSource;
-		this.swaggerConfiguration = swaggerConfiguration;
 	}
 
 	@GetMapping(path = "/users", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
@@ -95,20 +89,20 @@ public class AdminController {
 
 		List<SongDTO> songDTOs = new ArrayList<>();
 		for (SongUploadRequest songUploadRequest : songUploadRequests) {
-			System.out.println(songUploadRequest.songName() + " "+ songUploadRequest.artistName());
-			
+			System.out.println(songUploadRequest.songName() + " " + songUploadRequest.artistName());
+
 			SongDTO songDTO = new SongDTO(songUploadRequest.songName(), songUploadRequest.artistName(),
 					songUploadRequest.category(), songUploadRequest.language(), songUploadRequest.url(),
 					songUploadRequest.durationInSeconds(), songUploadRequest.rating());
-			
+
 			songDTOs.add(songDTO);
 		}
 
 		List<SongDTO> uploadSongDTOs = songService.uploadSong(songDTOs);
 		List<SongResponse> songResponses = new ArrayList<>();
-		
-		for(SongDTO updatedSongDTO : uploadSongDTOs) {
-			System.out.println(updatedSongDTO.getSongName() + " "+ updatedSongDTO.getArtistName());
+
+		for (SongDTO updatedSongDTO : uploadSongDTOs) {
+			System.out.println(updatedSongDTO.getSongName() + " " + updatedSongDTO.getArtistName());
 
 			songResponses.add(new SongResponse(updatedSongDTO.getPublicId(), updatedSongDTO.getSongName(),
 					updatedSongDTO.getArtistName(), updatedSongDTO.getCategory(), updatedSongDTO.getLanguage(),
@@ -123,10 +117,11 @@ public class AdminController {
 					MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Upload songs")
 	public SongResponse updateSong(@RequestBody UpdateSongRequest updateSongRequest, Authentication authentication) {
-		
+
 		SongDTO songDTO = new SongDTO(updateSongRequest.publicId(), updateSongRequest.updatedSongName(),
-				updateSongRequest.updatedArtistName(), updateSongRequest.updatedCategory(), updateSongRequest.updatedLanguage(),
-				updateSongRequest.updatedUrl(), updateSongRequest.updatedDurationInSeconds(), updateSongRequest.updatedRating());
+				updateSongRequest.updatedArtistName(), updateSongRequest.updatedCategory(),
+				updateSongRequest.updatedLanguage(), updateSongRequest.updatedUrl(),
+				updateSongRequest.updatedDurationInSeconds(), updateSongRequest.updatedRating());
 
 		SongDTO updatedSongDTO = songService.updateSong(songDTO);
 
@@ -134,6 +129,5 @@ public class AdminController {
 				updatedSongDTO.getArtistName(), updatedSongDTO.getCategory(), updatedSongDTO.getLanguage(),
 				updatedSongDTO.getDurationInSeconds(), updatedSongDTO.getRating());
 	}
-	
-	
+
 }
