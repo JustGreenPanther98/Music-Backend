@@ -18,17 +18,15 @@ import com.songs.wallah.service.OtpService;
 @Service
 public class OtpServiceImplementation implements OtpService {
 
-    private final UserServiceImpl userServiceImpl;
 	private EmailSenderImpl emailSenderImpl;
 	private OtpRepository otpRepository;
 	private UserRepository userRepository;
 
 	public OtpServiceImplementation(EmailSenderImpl emailSenderImpl, OtpRepository otpRepository,
-			UserRepository userRepository, UserServiceImpl userServiceImpl) {
+			UserRepository userRepository) {
 		this.emailSenderImpl = emailSenderImpl;
 		this.otpRepository = otpRepository;
 		this.userRepository = userRepository;
-		this.userServiceImpl = userServiceImpl;
 	}
 
 	@Override

@@ -1,7 +1,8 @@
 package com.songs.wallah.controller;
 
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,6 @@ import com.songs.wallah.response.UserProfile;
 import com.songs.wallah.response.UserResponse;
 import com.songs.wallah.service.OtpService;
 import com.songs.wallah.service.UserService;
-import com.songs.wallah.service.implementation.EmailSenderImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,20 +35,15 @@ import jakarta.validation.Valid;
 @CrossOrigin("*")
 public class UserController {
 
-    private final EmailSenderImpl emailSenderImpl;
-
-	private final AuthenticationManager authenticationManager;
 	private UserService userService;
 	private OtpService otpService;
 
-	public UserController(UserService userService, OtpService otpService,
-			AuthenticationManager authenticationManager, EmailSenderImpl emailSenderImpl) {
+	public UserController(UserService userService, OtpService otpService) {
+
 		this.userService = userService;
 		this.otpService = otpService;
-		this.authenticationManager = authenticationManager;
-		this.emailSenderImpl = emailSenderImpl;
 	}
-
+	
 	@PostMapping(path = "/signup", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Creation of account")
 	public UserResponse createAccount(@Valid @RequestBody UserSignupRequest userSignupRequest) {
@@ -65,9 +60,8 @@ public class UserController {
 		UserResponse userResponse = new UserResponse(createdUserDTO.getPublicId(), createdUserDTO.getEmail());
 		return userResponse;
 	}
-	
-	@PostMapping(path="/resend-otp", consumes = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
+
+	@PostMapping(path = "/resend-otp", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Resend OTP", description = "(Resend OTP to email which is already being signup (Latest OTP will get accepted))")
 	public OperationStatus resendOtp(@RequestBody ResendOtpRequest otpResend) {
 		return otpService.resendOtp(otpResend.email());
@@ -78,16 +72,15 @@ public class UserController {
 					MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "It Verifies account using OTP", description = "(It takes email,otp in form of json or xml and returns(OTP_EXPIRED/INVALID_OTP/INVALID_EMAIL/SUCCESS/ERROR), Without email verification the user can't login)")
 	public OtpVerification verifyEmail(@RequestBody EmailVerificationRequest emailVerificationRequest) {
-		return otpService.verifyOtp(emailVerificationRequest.email(),
-				emailVerificationRequest.otp().toString());
+		return otpService.verifyOtp(emailVerificationRequest.email(), emailVerificationRequest.otp().toString());
 	}
 
 	@GetMapping(path = "/me")
 	@Operation(summary = "Returns User's Details (LOGIN REQUIRED)", description = "(It returns whole user profile [but NOT password,email])")
 	public UserProfile getProfile(Authentication authentication) {
 		UserDTO userDTO = userService.getUser(authentication.getName());
-		UserProfile userProfile = new UserProfile(userDTO.getPublicId(), userDTO.getFirstName(), userDTO.getMiddleName(),
-				userDTO.getLastName(), userDTO.getAge(), userDTO.getEmail());
+		UserProfile userProfile = new UserProfile(userDTO.getPublicId(), userDTO.getFirstName(),
+				userDTO.getMiddleName(), userDTO.getLastName(), userDTO.getAge(), userDTO.getEmail());
 		return userProfile;
 
 	}
@@ -112,5 +105,4 @@ public class UserController {
 		return userUpdateRequest;
 	}
 
-	
 }

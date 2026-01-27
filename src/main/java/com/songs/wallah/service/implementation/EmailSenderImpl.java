@@ -1,41 +1,55 @@
 package com.songs.wallah.service.implementation;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 import com.songs.wallah.service.EmailService;
 
 @Service
 public class EmailSenderImpl implements EmailService {
-	
-	private JavaMailSender javaMailSender;
-	
-	public EmailSenderImpl(JavaMailSender javaMailSender) {
-		this.javaMailSender=javaMailSender;
+	private final SendGrid sendGrid;
+	private final String apiKey;
+
+	public EmailSenderImpl(@Value("${SENDGRID_API_KEY:}") String apiKey) {
+		this.apiKey=apiKey;
+		this.sendGrid = new SendGrid(apiKey);
 	}
 
-	@Value("${spring.mail.username}")
-	private String from;
-	
-	@Override
-	public void sendEmail(String to, String Subject, String body) {
-		SimpleMailMessage simpleMailMessage = new SimpleMailMessage(); 
-		simpleMailMessage.setFrom(from);
-		simpleMailMessage.setTo(to);
-		simpleMailMessage.setSubject(Subject);
-		simpleMailMessage.setText(body);
-		javaMailSender.send(simpleMailMessage);
+	public void sendOTP(String toEmail, String otp) {
+		Email from = new Email("zippyjese@gmail.com");
+		Email to = new Email(toEmail);
+		String subject = "Verification Email";
+		Content content = new Content("text/plain", "Your OTP is: " + otp);
+
+		Mail mail = new Mail(from, subject, to, content);
+
+		Request request = new Request();
+		try {
+			request.setMethod(Method.POST);
+			request.setEndpoint("mail/send");
+			request.setBody(mail.build());
+
+			Response response = sendGrid.api(request);
+			System.out.println("SendGrid status: " + response.getStatusCode());
+
+			if (response.getStatusCode() != 202) {
+				throw new RuntimeException("Email not accepted by SendGrid");
+			}
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to send email", e);
+		}
 	}
 
 	@Override
-	public void sendOTP(String to, String otp) {
-		SimpleMailMessage simpleMailMessage = new SimpleMailMessage(); 
-		simpleMailMessage.setFrom(from);
-		simpleMailMessage.setTo(to);
-		simpleMailMessage.setSubject("Email verification");
-		simpleMailMessage.setText(otp);
-		javaMailSender.send(simpleMailMessage);
+	public void sendEmail(String to, String body, String Subject) {
+		// TODO Auto-generated method stub
+
 	}
 }
