@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("api/v1/admin")
+@RequestMapping("/api/v1/admin")
 @Tag(name = "Admin APIs")
 public class AdminController {
 
@@ -53,7 +53,7 @@ public class AdminController {
 		return usersProfile;
 	}
 
-	@DeleteMapping(path = "/user-delete", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@DeleteMapping(path = "/user", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Deletion of user using public user id and email")
@@ -62,7 +62,7 @@ public class AdminController {
 		return userService.deleteUserByEmailAndId(deleteUserRequest.publicId(), deleteUserRequest.email());
 	}
 
-	@PostMapping(path = "/upload-song", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PostMapping(path = "/song", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Upload song")
@@ -80,7 +80,7 @@ public class AdminController {
 
 	}
 
-	@PostMapping(path = "/upload-songs", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PostMapping(path = "/songs", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Upload songs")
@@ -89,7 +89,6 @@ public class AdminController {
 
 		List<SongDTO> songDTOs = new ArrayList<>();
 		for (SongUploadRequest songUploadRequest : songUploadRequests) {
-			System.out.println(songUploadRequest.songName() + " " + songUploadRequest.artistName());
 
 			SongDTO songDTO = new SongDTO(songUploadRequest.songName(), songUploadRequest.artistName(),
 					songUploadRequest.category(), songUploadRequest.language(), songUploadRequest.url(),
@@ -112,7 +111,7 @@ public class AdminController {
 
 	}
 
-	@PutMapping(path = "/update-song", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PutMapping(path = "/song", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Upload songs")

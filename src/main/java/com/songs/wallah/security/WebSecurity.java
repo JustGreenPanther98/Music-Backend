@@ -75,8 +75,7 @@ public class WebSecurity {
 				.requestMatchers(HttpMethod.POST, SecurityConstaints.EMAIL_VERIFICATION).permitAll()
 				.requestMatchers(HttpMethod.POST, SecurityConstaints.RESEND_OTP).permitAll()
 				.requestMatchers(HttpMethod.POST, SecurityConstaints.LOGIN).permitAll()
-				.requestMatchers(HttpMethod.POST, "/api/v1/users/upload-song").permitAll()
-				.requestMatchers("/admin/**").hasRole(Role.ADMIN.toString())
+				.requestMatchers(SecurityConstaints.ADMIN_APIs).hasRole(Role.ADMIN.toString())
 				.anyRequest().authenticated());
 
 		http.addFilter(authFilter).addFilterBefore(new AuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
