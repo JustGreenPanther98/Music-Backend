@@ -10,9 +10,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "favorite")
+@Table(name = "favorite",uniqueConstraints = {@UniqueConstraint(columnNames = {"user", "favSong"})})
 public class FavoriteEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

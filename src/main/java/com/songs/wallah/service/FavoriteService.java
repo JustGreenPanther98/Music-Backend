@@ -9,4 +9,6 @@ import com.songs.wallah.enums.songs.Priority;
 public interface FavoriteService {
 	List<FavoriteDTO> getFavorites(String email);
 	FavoriteDTO setFavoriteSong(String email,UUID songId,Priority priority);
+	List<FavoriteDTO> getFavoriteSongsByPriority(String email,Priority priority);
+
 }

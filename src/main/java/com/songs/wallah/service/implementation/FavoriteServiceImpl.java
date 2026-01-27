@@ -36,7 +36,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 		UserEntity user = userRepository.findByEmail(email);
 		List<FavoriteDTO> favoriteDTOs = new ArrayList<>();
 		ModelMapper mapper = new ModelMapper();
-		for(FavoriteEntity favorite : user.getFavorites()) {
+		for(FavoriteEntity favorite : favoriteRepository.getFavoriteSongByPriority(user.getId())) {
 			favoriteDTOs.add(mapper.map(favorite, FavoriteDTO.class));
 		}
 		
@@ -58,6 +58,18 @@ public class FavoriteServiceImpl implements FavoriteService {
 		favorite.setPriority(priority);
 		favorite.setUser(userRepository.findByEmail(email));
 		return mapper.map(favoriteRepository.save(favorite),FavoriteDTO.class);
+	}
+
+	@Override
+	public List<FavoriteDTO> getFavoriteSongsByPriority(String email, Priority priority) {
+		UserEntity user = userRepository.findByEmail(email);
+		List<FavoriteDTO> favoriteDTOs = new ArrayList<>();
+		ModelMapper mapper = new ModelMapper();
+		for(FavoriteEntity favorite : favoriteRepository.getFavoriteSongOfPriority(user.getId(), priority)) {
+			favoriteDTOs.add(mapper.map(favorite, FavoriteDTO.class));
+		}
+		
+		return favoriteDTOs;
 	}
 
 }

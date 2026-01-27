@@ -17,11 +17,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 
 @Entity
-@Table(name = "song_details")
+@Table(name = "song_details",uniqueConstraints = {@UniqueConstraint(columnNames = {"url"})})
 public class SongEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +44,7 @@ public class SongEntity {
 	@Enumerated(EnumType.STRING)
 	private Language language;
 
-	@Column(nullable = false)
+	@Column(nullable = false,unique=true)
 	private String url;
 
 	@Column(nullable = false)

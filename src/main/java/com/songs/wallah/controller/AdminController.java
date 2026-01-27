@@ -76,7 +76,7 @@ public class AdminController {
 
 		return new SongResponse(updatedSongDTO.getPublicId(), updatedSongDTO.getSongName(),
 				updatedSongDTO.getArtistName(), updatedSongDTO.getCategory(), updatedSongDTO.getLanguage(),
-				updatedSongDTO.getDurationInSeconds(), updatedSongDTO.getRating());
+				updatedSongDTO.getDurationInSeconds(), updatedSongDTO.getRating(),updatedSongDTO.getUrl());
 
 	}
 
@@ -105,7 +105,7 @@ public class AdminController {
 
 			songResponses.add(new SongResponse(updatedSongDTO.getPublicId(), updatedSongDTO.getSongName(),
 					updatedSongDTO.getArtistName(), updatedSongDTO.getCategory(), updatedSongDTO.getLanguage(),
-					updatedSongDTO.getDurationInSeconds(), updatedSongDTO.getRating()));
+					updatedSongDTO.getDurationInSeconds(), updatedSongDTO.getRating(),updatedSongDTO.getUrl()));
 		}
 		return songResponses;
 
@@ -126,7 +126,7 @@ public class AdminController {
 
 		return new SongResponse(updatedSongDTO.getPublicId(), updatedSongDTO.getSongName(),
 				updatedSongDTO.getArtistName(), updatedSongDTO.getCategory(), updatedSongDTO.getLanguage(),
-				updatedSongDTO.getDurationInSeconds(), updatedSongDTO.getRating());
+				updatedSongDTO.getDurationInSeconds(), updatedSongDTO.getRating(),updatedSongDTO.getUrl());
 	}
 
 }

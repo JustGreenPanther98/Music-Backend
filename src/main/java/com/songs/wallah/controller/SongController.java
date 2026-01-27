@@ -40,7 +40,7 @@ public class SongController {
 		List<SongResponse> songResponses = new ArrayList<>();
 		for (SongDTO songDTO : songDTOs) {
 			songResponses.add(new SongResponse(songDTO.getPublicId(), songDTO.getSongName(), songDTO.getArtistName(),
-					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating()));
+					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),songDTO.getUrl()));
 		}
 		return songResponses;
 	}
@@ -53,7 +53,7 @@ public class SongController {
 		List<SongResponse> songResponses = new ArrayList<>();
 		for (SongDTO songDTO : songDTOs) {
 			songResponses.add(new SongResponse(songDTO.getPublicId(), songDTO.getSongName(), songDTO.getArtistName(),
-					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating()));
+					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),songDTO.getUrl()));
 		}
 		return songResponses;
 	}
@@ -66,7 +66,7 @@ public class SongController {
 		List<SongResponse> songResponses = new ArrayList<>();
 		for (SongDTO songDTO : songDTOs) {
 			songResponses.add(new SongResponse(songDTO.getPublicId(), songDTO.getSongName(), songDTO.getArtistName(),
-					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating()));
+					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),songDTO.getUrl()));
 		}
 		return songResponses;
 	}
@@ -78,7 +78,7 @@ public class SongController {
 		List<SongResponse> songResponses = new ArrayList<>();
 		for (SongDTO songDTO : songDTOs) {
 			songResponses.add(new SongResponse(songDTO.getPublicId(), songDTO.getSongName(), songDTO.getArtistName(),
-					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating()));
+					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),songDTO.getUrl()));
 		}
 		return songResponses;
 	}
