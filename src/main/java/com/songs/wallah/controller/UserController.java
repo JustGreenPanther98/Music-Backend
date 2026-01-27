@@ -39,7 +39,6 @@ public class UserController {
 	private OtpService otpService;
 
 	public UserController(UserService userService, OtpService otpService) {
-
 		this.userService = userService;
 		this.otpService = otpService;
 	}
