@@ -1,3 +1,5 @@
+<h1>Information</h1>
+
 <h2>1) Identity and Security (Core System)</h2>
 
 <p>
@@ -102,4 +104,81 @@
 <p>
   Overall, the system is designed to scale cleanly without unnecessary architectural complexity.
 </p>
+
+<h1>Database Architecture</h1>
+
+<p>
+  The database design for <strong>Songs Wallah</strong> is built around five core tables, each with
+  a clearly defined responsibility. The schema avoids unnecessary coupling while still supporting
+  performance-heavy queries.
+</p>
+
+<h3>1. Users Table (<code>users</code>)</h3>
+
+<p>
+  This table acts as the system’s primary identity source.
+</p>
+
+<ul>
+  <li><strong>Primary Key:</strong> <code>id</code> (Long)</li>
+  <li>
+    <strong>Public Identifier:</strong> <code>public_id</code> (UUID), used in API responses to
+    avoid exposing internal IDs
+  </li>
+  <li>
+    <strong>Fields:</strong> Email, encrypted password, first name, last name, and age
+  </li>
+  <li>
+    <strong>Verification:</strong> <code>email_verification</code> flag to control access
+  </li>
+</ul>
+
+<h3>2. Songs Table (<code>song_details</code>)</h3>
+
+<p>
+  This table represents the global music catalog.
+</p>
+
+<ul>
+  <li>
+    <strong>Indexing:</strong> Optimized for filtering by artist name, category, and language using
+    native SQL
+  </li>
+  <li>
+    <strong>Metadata:</strong> Cloud URL, duration, rating, and public UUID
+  </li>
+</ul>
+
+<h3>3. Playlists Table (<code>playlist</code>)</h3>
+
+<p>
+  This table manages user-created collections and their visibility.
+</p>
+
+<ul>
+  <li><strong>Ownership:</strong> Linked to users via <code>owner_id</code></li>
+  <li>
+    <strong>Privacy:</strong> Uses <code>accessibility</code> (PUBLIC / PRIVATE) to control
+    visibility
+  </li>
+  <li>
+    <strong>Song Mapping:</strong> Many-to-many relationship via a join table
+    (e.g., <code>playlist_songs</code>)
+  </li>
+</ul>
+
+<h3>4. Favorites Table (<code>favorite</code>)</h3>
+
+<p>
+  This table handles personalized user preferences.
+</p>
+
+<ul>
+  <li>
+    <strong>Priority-Based Sorting:</strong> Includes a <code>priority</code> column (High, Medium,
+    Low)
+  </li>
+  <li>
+    <strong>Per
+
 
