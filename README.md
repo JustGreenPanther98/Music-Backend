@@ -1,4 +1,4 @@
-<h2>Identity and Security (Core System)</h2>
+<h2>1) Identity and Security (Core System)</h2>
 
 <p>
   Here, security is not viewed as an add-on; rather, it serves as the foundation upon which the rest of the application is built.
@@ -19,7 +19,7 @@
   This eliminates the need for manual intervention or cron jobs, keeping the verification table lean.
 </p>
 
-<h2>Finding & Searching for Music</h2>
+<h2>2) Finding & Searching for Music</h2>
 
 <p>
   Instead of using a flat list, the song system is designed to meet real-world discovery needs.
@@ -48,7 +48,7 @@
   For complex filters, the repository layer uses native SQL, which provides consistent performance as the dataset expands.
 </p>
 
-<h2>🛠️ Admin Tools</h2>
+<h2>3) Admin Tools</h2>
 
 <p>
   Administrative functionality is deliberately isolated from standard user workflows.
@@ -74,7 +74,7 @@
   Admin and user operations do not share endpoint logic. This separation prevents permission
   leakage and keeps responsibilities clearly defined within the system.
 </p>
-<h2>🚀 Performance &amp; Reliability</h2>
+<h2>4) Performance &amp; Reliability</h2>
 
 <p>
   Performance and reliability decisions in the system are intentional rather than abstract
