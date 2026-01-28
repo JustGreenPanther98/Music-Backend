@@ -1,0 +1,105 @@
+<h2>Identity and Security (Core System)</h2>
+
+<p>
+  Here, security is not viewed as an add-on; rather, it serves as the foundation upon which the rest of the application is built.
+</p>
+
+<p>
+  JWT-based stateless sessions, which eliminate the need for server-side session storage and scale smoothly as traffic increases,
+  are used to handle authentication. After logging in, tokens are generated and verified for each protected request.
+</p>
+
+<p>
+  SendGrid's email-based OTP validation is used to enforce user verification. Fake or partially created users are eliminated
+  early in the lifecycle because accounts cannot be used until verification is finished.
+</p>
+
+<p>
+  Expired OTPs are automatically eliminated using native SQL cleanup queries to avoid OTP clutter and needless table growth.
+  This eliminates the need for manual intervention or cron jobs, keeping the verification table lean.
+</p>
+
+<h2>Finding & Searching for Music</h2>
+
+<p>
+  Instead of using a flat list, the song system is designed to meet real-world discovery needs.
+</p>
+
+<p>
+  Several criteria can be used to filter songs:
+</p>
+
+<ul>
+  <li>Name of the artist</li>
+  <li>Language</li>
+  <li>Category or genre</li>
+</ul>
+
+<p>
+  Combining these filters makes it simple to refine results without using complex query logic.
+</p>
+
+<p>
+  The API returns streaming-ready data without the need for extra lookups or transformations because each song stores all of its
+  metadata, including duration, ratings, and cloud storage URLs.
+</p>
+
+<p>
+  For complex filters, the repository layer uses native SQL, which provides consistent performance as the dataset expands.
+</p>
+
+<h2>🛠️ Admin Tools</h2>
+
+<p>
+  Administrative functionality is deliberately isolated from standard user workflows.
+</p>
+
+<p>
+  Admins are provided with dedicated endpoints that allow them to:
+</p>
+
+<ul>
+  <li>
+    Upload multiple songs in a single batch, making large library updates efficient
+  </li>
+  <li>
+    Update song metadata such as ratings, URLs, and categories without requiring re-uploads
+  </li>
+  <li>
+    View user profiles and process account deletions through controlled request objects
+  </li>
+</ul>
+
+<p>
+  Admin and user operations do not share endpoint logic. This separation prevents permission
+  leakage and keeps responsibilities clearly defined within the system.
+</p>
+<h2>🚀 Performance &amp; Reliability</h2>
+
+<p>
+  Performance and reliability decisions in the system are intentional rather than abstract
+  optimizations.
+</p>
+
+<p>
+  All request and response payloads are implemented using <strong>Java Records</strong>, which
+  enforces immutability and minimizes unintended side effects across service boundaries.
+</p>
+
+<p>
+  Error handling is centralized through a global exception handler. Scenarios such as missing
+  songs, invalid OTPs, or unauthorized access return clear, structured error responses instead of
+  generic server failures.
+</p>
+
+<p>
+  In cases where ORM-based queries became inefficient or difficult to reason about,
+  <strong>native SQL was used deliberately</strong>. This improves execution performance and query
+  readability, with the known trade-off of reduced portability—an acceptable compromise for this
+  application.
+</p>
+
+<p>
+  Overall, the system is designed to scale cleanly without unnecessary architectural complexity.
+</p>
+
