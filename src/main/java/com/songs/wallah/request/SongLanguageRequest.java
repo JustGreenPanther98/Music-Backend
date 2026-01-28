@@ -2,6 +2,8 @@ package com.songs.wallah.request;
 
 import com.songs.wallah.enums.songs.Language;
 
-public record SongLanguageRequest(Language langauge) {
+import jakarta.validation.constraints.NotBlank;
+
+public record SongLanguageRequest(@NotBlank Language langauge) {
 
 }

@@ -1,12 +1,14 @@
 package com.songs.wallah.request;
 
-import com.songs.wallah.entity.SongEntity;
-import com.songs.wallah.entity.UserEntity;
-import com.songs.wallah.enums.songs.PlayListAccess;
+import java.util.List;
+import java.util.UUID;
+
 import com.songs.wallah.enums.songs.Priority;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-public record PlaylistCreationRequest(@NotBlank String playlistName, @NotBlank Priority priority,
-		@NotBlank PlayListAccess accessability, @NotBlank SongEntity playlistSong, @NotBlank UserEntity owner) {
+public record PlaylistCreationRequest(@NotBlank String playlistName,  Priority priority,
+		 @NotNull @NotEmpty UUID SongId) {
 }

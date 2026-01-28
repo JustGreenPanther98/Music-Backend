@@ -2,12 +2,14 @@ package com.songs.wallah.service.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.songs.wallah.DataTransferObject.SongDTO;
 import com.songs.wallah.entity.SongEntity;
+import com.songs.wallah.entity.UserEntity;
 import com.songs.wallah.repository.SongRepository;
 import com.songs.wallah.repository.UserRepository;
 import com.songs.wallah.service.SongService;
@@ -119,6 +121,16 @@ public class SongServiceImpl implements SongService {
 		SongEntity updatedSong = songRepository.save(songEntity);
 		ModelMapper modelMapper = new ModelMapper();
 		return modelMapper.map(updatedSong, SongDTO.class);
+	}
+
+	@Override
+	public SongDTO getBySongId(UUID id) {
+		SongEntity song = songRepository.findSongByPublicId(id);
+		if(song==null) {
+			throw new RuntimeException(id +" doesn't exist");
+		}
+		ModelMapper mapper = new ModelMapper();
+		return mapper.map(song, SongDTO.class);
 	}
 
 }

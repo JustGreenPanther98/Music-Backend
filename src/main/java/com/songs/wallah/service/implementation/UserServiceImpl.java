@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 		return modelMapper.map(userEntity, UserDTO.class);
 
 	}
-	
+	@Override
 	public UserDTO updateUser(UserDTO updatedDetails) {
 		if(updatedDetails==null) {
 			throw new RuntimeException("Invalid login!");
@@ -92,6 +92,7 @@ public class UserServiceImpl implements UserService {
 		return updatedUser;
 	}
 	
+	@Override
 	public List<UserDTO> getAllUsers() {
 		Iterable<UserEntity> users = userRepository.findAll();
 		List<UserDTO> usersDTO = new ArrayList<>();

@@ -1,6 +1,7 @@
 package com.songs.wallah.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.songs.wallah.DataTransferObject.SongDTO;
 
@@ -19,4 +20,6 @@ public interface SongService {
 	List<SongDTO> getLanguageSongs(String language);
 
 	SongDTO updateSong(SongDTO songDTO);
+	
+	SongDTO getBySongId(UUID id);
 }

@@ -3,8 +3,7 @@ package com.songs.wallah.DataTransferObject;
 import java.util.List;
 import java.util.UUID;
 
-import com.songs.wallah.entity.FavoriteEntity;
-import com.songs.wallah.entity.PlaylistEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.songs.wallah.enums.songs.Category;
 import com.songs.wallah.enums.songs.Language;
 
@@ -19,8 +18,10 @@ public class SongDTO {
 	private String url;
 	private int durationInSeconds;
 	private double rating;
-	private List<FavoriteEntity> favoriteSongs;
-	private List<PlaylistEntity> playlistSongs;
+	@JsonIgnoreProperties("favSong")
+	private List<FavoriteDTO> favoriteSongs;
+	@JsonIgnoreProperties("playlistSong")
+	private List<PlaylistDTO> playlistSongs;
 
 	public SongDTO() {
 
@@ -50,8 +51,8 @@ public class SongDTO {
 	}
 
 	public SongDTO(String songName, String artistName, Category category, Language language, String url,
-			int durationInSeconds, double rating, List<FavoriteEntity> favoriteSongs,
-			List<PlaylistEntity> playlistSongs) {
+			int durationInSeconds, double rating, List<FavoriteDTO> favoriteSongs,
+			List<PlaylistDTO> playlistSongs) {
 		super();
 		this.songName = songName;
 		this.artistName = artistName;
@@ -128,19 +129,19 @@ public class SongDTO {
 		this.rating = rating;
 	}
 
-	public List<FavoriteEntity> getFavoriteSongs() {
+	public List<FavoriteDTO> getFavoriteSongs() {
 		return favoriteSongs;
 	}
 
-	public void setFavoriteSongs(List<FavoriteEntity> favoriteSongs) {
+	public void setFavoriteSongs(List<FavoriteDTO> favoriteSongs) {
 		this.favoriteSongs = favoriteSongs;
 	}
 
-	public List<PlaylistEntity> getPlaylistSongs() {
+	public List<PlaylistDTO> getPlaylistSongs() {
 		return playlistSongs;
 	}
 
-	public void setPlaylistSongs(List<PlaylistEntity> playlistSongs) {
+	public void setPlaylistSongs(List<PlaylistDTO> playlistSongs) {
 		this.playlistSongs = playlistSongs;
 	}
 

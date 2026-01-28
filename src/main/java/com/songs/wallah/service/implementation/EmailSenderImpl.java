@@ -37,8 +37,7 @@ public class EmailSenderImpl implements EmailService {
 			request.setBody(mail.build());
 
 			Response response = sendGrid.api(request);
-			System.out.println("SendGrid status: " + response.getStatusCode());
-
+			
 			if (response.getStatusCode() != 202) {
 				throw new RuntimeException("Email not accepted by SendGrid");
 			}

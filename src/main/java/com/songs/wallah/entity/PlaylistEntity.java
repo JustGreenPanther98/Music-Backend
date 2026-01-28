@@ -1,5 +1,7 @@
 package com.songs.wallah.entity;
 
+import java.util.List;
+
 import com.songs.wallah.enums.songs.PlayListAccess;
 import com.songs.wallah.enums.songs.Priority;
 
@@ -11,12 +13,15 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "playlist",uniqueConstraints = {@UniqueConstraint(columnNames = {"playlistName", "playlistSong"})})
+@Table(name = "playlist")
 public class PlaylistEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +37,9 @@ public class PlaylistEntity {
 	@Column(nullable = false)
 	private PlayListAccess accessability;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	private SongEntity playlistSong;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "playlist_songs_map", joinColumns = @JoinColumn(name = "playlist_id"), inverseJoinColumns = @JoinColumn(name = "song_id"))
+	private List<SongEntity> playlistSong;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private UserEntity owner;
@@ -78,11 +84,11 @@ public class PlaylistEntity {
 		this.owner = owner;
 	}
 
-	public SongEntity getPlaylistSong() {
+	public List<SongEntity> getPlaylistSong() {
 		return playlistSong;
 	}
 
-	public void setPlaylistSong(SongEntity playlistSong) {
+	public void setPlaylistSong(List<SongEntity> playlistSong) {
 		this.playlistSong = playlistSong;
 	}
 

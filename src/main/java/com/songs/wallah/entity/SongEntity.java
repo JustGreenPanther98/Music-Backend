@@ -14,6 +14,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -58,7 +59,7 @@ public class SongEntity {
 	@OneToMany(mappedBy = "favSong", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<FavoriteEntity> favoriteSongs;
 
-	@OneToMany(mappedBy = "playlistSong", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "playlistSong", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<PlaylistEntity> playlistSongs;
 
 	@PrePersist

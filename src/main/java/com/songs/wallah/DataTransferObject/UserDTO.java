@@ -3,8 +3,7 @@ package com.songs.wallah.DataTransferObject;
 import java.util.List;
 import java.util.UUID;
 
-import com.songs.wallah.entity.FavoriteEntity;
-import com.songs.wallah.entity.PlaylistEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.songs.wallah.enums.songs.Role;
 
 public class UserDTO {
@@ -18,8 +17,10 @@ public class UserDTO {
 	private String email;
 	private String encryptedPassword;
 	private boolean emailVerification=false;
-	private List<FavoriteEntity> favorites;
-	private List<PlaylistEntity> playlist;
+	@JsonIgnoreProperties("favSong")
+	private List<FavoriteDTO> favorites;
+	@JsonIgnoreProperties("owner")
+	private List<PlaylistDTO> playlist;
 	private Role role;
 
 	public long getId() {
@@ -94,19 +95,19 @@ public class UserDTO {
 		this.emailVerification = emailVerification;
 	}
 
-	public List<FavoriteEntity> getFavorites() {
+	public List<FavoriteDTO> getFavorites() {
 		return favorites;
 	}
 
-	public void setFavorites(List<FavoriteEntity> favorites) {
+	public void setFavorites(List<FavoriteDTO> favorites) {
 		this.favorites = favorites;
 	}
 
-	public List<PlaylistEntity> getPlaylist() {
+	public List<PlaylistDTO> getPlaylist() {
 		return playlist;
 	}
 
-	public void setPlaylist(List<PlaylistEntity> playlist) {
+	public void setPlaylist(List<PlaylistDTO> playlist) {
 		this.playlist = playlist;
 	}
 
