@@ -1,5 +1,5 @@
 <h1>API Information</h1>
-<p>## Live API Documentation</p>
+<p>Live API Documentation</p>
 <p>The API is fully documented and interactive via Swagger UI. You can test the endpoints, view request schemas, and explore the API live:
 </p>
 <h3>[Explore Songs Wallah API Live]</h3>
