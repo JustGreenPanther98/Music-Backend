@@ -3,8 +3,8 @@
 <p>The API is fully documented and interactive via Swagger UI. You can test the endpoints, view request schemas, and explore the API live:
 </p>
 <h3>[Explore Songs Wallah API Live]</h3>
-(https://music-apis-eokm.onrender.com/swagger-ui/index.html)
-
+<p>(https://music-apis-eokm.onrender.com/swagger-ui/index.html)</p>
+<br>
 ><p>**Note:** Since the app is hosted on Render's free tier, the first request might take 30-60 seconds to "wake up" the server.</p>
 
 <h1>Information</h1>
