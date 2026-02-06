@@ -41,7 +41,7 @@ public class SwaggerConfiguration {
 
 		// server => url,description,variable
 		openAPI.setServers(Arrays.asList(new Server().url("http://localhost:8080").description("Local"),
-				new Server().url("https://untrying-citylike-vickey.ngrok-free.dev").description("Public")));
+				new Server().url("https://music-apis-eokm.onrender.com").description("Public")));
 
 		// setting up TOKEN TYPE VERIFICATION
 //		SecurityScheme jwtScheme = new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer")
