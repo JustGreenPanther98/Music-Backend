@@ -84,7 +84,7 @@ public class UserController {
 
 	}
 
-	@PutMapping(path = "/update", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PutMapping(consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Update User's Details (LOGIN REQUIRED)", description = "(It takes whole profile for updation, but you can only update first name,middle name,last name,age)")

@@ -32,7 +32,7 @@ public class SongController {
 		this.songService = songService;
 	}
 
-	@GetMapping(path = "/all", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "It gives all songs")
 	public List<SongResponse> getAllSongs(Authentication authentication) {
 
