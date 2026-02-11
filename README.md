@@ -2,7 +2,7 @@
 <p>Live API Documentation</p>
 <p>The API is fully documented and interactive via Swagger UI. You can test the endpoints, view request schemas, and explore the API live:
 </p>
-<h3>[Explore Songs Wallah API Live]</h3>
+<h3>Explore Songs Wallah API Documentation</h3>
 <p><a href = "https://music-apis-eokm.onrender.com/swagger-ui/index.html">Swagger</a></p>
 <h3>Base URL</h3>
 <p>https://music-apis-eokm.onrender.com</p>
