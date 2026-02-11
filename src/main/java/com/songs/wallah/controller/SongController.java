@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/songs")
-@Tag(name = "Song APIs")
+@Tag(name = "Song APIs",description="(LOGIN REQUIRED)")
 public class SongController {
 
 	private SongService songService;
@@ -40,7 +40,8 @@ public class SongController {
 		List<SongResponse> songResponses = new ArrayList<>();
 		for (SongDTO songDTO : songDTOs) {
 			songResponses.add(new SongResponse(songDTO.getPublicId(), songDTO.getSongName(), songDTO.getArtistName(),
-					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),songDTO.getUrl()));
+					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),
+					songDTO.getUrl()));
 		}
 		return songResponses;
 	}
@@ -53,7 +54,8 @@ public class SongController {
 		List<SongResponse> songResponses = new ArrayList<>();
 		for (SongDTO songDTO : songDTOs) {
 			songResponses.add(new SongResponse(songDTO.getPublicId(), songDTO.getSongName(), songDTO.getArtistName(),
-					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),songDTO.getUrl()));
+					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),
+					songDTO.getUrl()));
 		}
 		return songResponses;
 	}
@@ -66,19 +68,22 @@ public class SongController {
 		List<SongResponse> songResponses = new ArrayList<>();
 		for (SongDTO songDTO : songDTOs) {
 			songResponses.add(new SongResponse(songDTO.getPublicId(), songDTO.getSongName(), songDTO.getArtistName(),
-					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),songDTO.getUrl()));
+					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),
+					songDTO.getUrl()));
 		}
 		return songResponses;
 	}
-	
-	@GetMapping(path="/language", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+
+	@GetMapping(path = "/language", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "It gives songs on the basis of languageW")
-	public List<SongResponse> getSongsByLanguage(@RequestBody SongLanguageRequest songLanguageRequest, Authentication authentication){
-		List<SongDTO> songDTOs  = songService.getLanguageSongs(songLanguageRequest.langauge().toString());
+	public List<SongResponse> getSongsByLanguage(@RequestBody SongLanguageRequest songLanguageRequest,
+			Authentication authentication) {
+		List<SongDTO> songDTOs = songService.getLanguageSongs(songLanguageRequest.langauge().toString());
 		List<SongResponse> songResponses = new ArrayList<>();
 		for (SongDTO songDTO : songDTOs) {
 			songResponses.add(new SongResponse(songDTO.getPublicId(), songDTO.getSongName(), songDTO.getArtistName(),
-					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),songDTO.getUrl()));
+					songDTO.getCategory(), songDTO.getLanguage(), songDTO.getDurationInSeconds(), songDTO.getRating(),
+					songDTO.getUrl()));
 		}
 		return songResponses;
 	}

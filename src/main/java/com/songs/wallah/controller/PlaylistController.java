@@ -23,11 +23,12 @@ import com.songs.wallah.response.PlaylistResponses;
 import com.songs.wallah.service.PlaylistService;
 import com.songs.wallah.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/v1/playlists")
-@Tag(name = "Playlist APIs")
+@RequestMapping("/api/v1/playlist")
+@Tag(name = "Playlist APIs" ,description="(LOGIN REQUIRED)")
 public class PlaylistController {
 
 	private PlaylistService playlistService;
@@ -40,6 +41,7 @@ public class PlaylistController {
 
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@Operation(summary="Create private playlist of user")
 	public CreatedPlaylistResponse createPlaylist(@RequestBody PlaylistCreationRequest playlistCreationRequest,
 			Authentication authentication) {
 
@@ -58,6 +60,7 @@ public class PlaylistController {
 	}
 
 	@GetMapping(path = "/public", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@Operation(summary="Get all public playlist {Public playlista are created by admins}")
 	public List<PlaylistResponses> getAllPublicPlayList(Authentication authentication) {
 
 		List<PlaylistDTO> playlistDTOs = playlistService.getPublicPlaylist();
@@ -78,6 +81,7 @@ public class PlaylistController {
 	}
 
 	@GetMapping(path = "/me", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@Operation(summary="Get all playlist created by user")
 	public List<PlaylistResponses> getUserPlayList(Authentication authentication) {
 
 		List<PlaylistDTO> playlistDTOs = playlistService.getUserPlaylist(authentication.getName());
@@ -97,10 +101,10 @@ public class PlaylistController {
 		return playlistsResponses;
 	}
 
-	@PutMapping(path = "/songs", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
+	@PutMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary="Adding a song to playlist")
 	public PlaylistResponses addSongToPlaylist(@RequestBody PlaylistCreationRequest request) {
-
 		PlaylistDTO playlistDTO = new PlaylistDTO();
 		playlistDTO.setPlaylistName(request.playlistName());
 		playlistDTO.setSongId(request.SongId());
